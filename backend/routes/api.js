@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
 router.post('/send', isAuthenticated, async (req, res) => {
   const { notificationText, recipient, sender } = req.body
   try {
+    console.log("making solid! (in backend)")
     await Solidz.create({ notificationText, recipient, sender })
     res.send(`sent solid: ${notificationText} to: ${recipient} from: ${sender}`)
   } catch {
