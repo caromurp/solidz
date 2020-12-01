@@ -12,6 +12,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 const getSolidz = async setSolidz => {
   const solidz = await axios.get('/api', {})
+  // console.log(solidz)
   const solidzList = solidz.data
   setSolidz(solidzList)
 }
@@ -42,7 +43,7 @@ const Home = () => {
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
-  // CHANGE
+  
   const handleSubmit = async () => {
     try {
       await axios.post('/api/send', { recipient: solidRecipient, notificationText: solidMessage, sender: user })
@@ -158,18 +159,16 @@ const Home = () => {
           <div>
             <ListGroup variant="flush">
               {solidz.map(s => {
-                let sndr = <a href={`/profile/${s.sender}`}>{s.sender}</a>;
-                let rcpnt = <a href={`/profile/${s.recipient}`}>{s.recipient}</a>;
-                (
+                let sndr = <a href={`/profile/${s.sender}`}>{s.sender}</a>
+                let rcpnt = <a href={`/profile/${s.recipient}`}>{s.recipient}</a>
+                return (
                   <div key={s._id}>
                     <ListGroup.Item>{sndr} sent {rcpnt} a solid: {s.notificationText}</ListGroup.Item>
                   </div>
-              )})}
+                )
+              })}
             </ListGroup>
           </div>
-          {/* <div>
-            <Question isLoggedIn={isLoggedIn} question={currQuestion} />
-          </div> */}
         </Container>
       </div>
     </Router>

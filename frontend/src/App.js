@@ -5,7 +5,6 @@ import {
   Route,
   Link,
 } from 'react-router-dom'
-import axios from 'axios'
 import Home from './Home'
 import Signup from './Signup'
 import Login from './Login'

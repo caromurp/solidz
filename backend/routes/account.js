@@ -3,7 +3,6 @@ const express = require('express')
 const Users = require('../models/users')
 
 const isAuthenticated = require('../middlewares/isAuthenticated')
-const solidz = require('../models/solidz')
 
 const router = express.Router()
 

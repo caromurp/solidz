@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose')
 
-const solidzSchema = new Schema({
+const solidzsSchema = new Schema({
   notificationText: String,
   recipient: String,
   sender: String,
 })
 
-module.exports = model('Solidz', solidzSchema)
+module.exports = model('Solidzs', solidzsSchema)
