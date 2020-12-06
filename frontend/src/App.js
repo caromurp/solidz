@@ -3,12 +3,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from 'react-router-dom'
 import Home from './Home'
 import Signup from './Signup'
 import Login from './Login'
 import Profile from './Profile'
+import NoUser from './NoUser'
 
 const App = () => (
   <Router>
@@ -22,8 +22,11 @@ const App = () => (
       <Route path="/login">
         <Login />
       </Route>
-      <Route path="/profile">
+      <Route path="/profile/:username">
         <Profile />
+      </Route>
+      <Route path="/noUser/:username">
+        <NoUser />
       </Route>
     </Switch>
   </Router>

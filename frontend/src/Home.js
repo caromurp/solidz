@@ -9,10 +9,10 @@ import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import Modal from 'react-bootstrap/Modal'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Form from 'react-bootstrap/Form'
 
 const getSolidz = async setSolidz => {
   const solidz = await axios.get('/api', {})
-  // console.log(solidz)
   const solidzList = solidz.data
   setSolidz(solidzList)
 }
@@ -38,6 +38,7 @@ const Home = () => {
   const [solidMessage, setSolidMessage] = useState('')
   const [solidRecipient, setSolidRecipient] = useState('')
   const [user, setUser] = useState('')
+  const [searchedUser, setSearchedUser] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const history = useHistory()
 
@@ -51,6 +52,31 @@ const Home = () => {
     } catch (e) {
       alert(`Error sending solid: ${e}`)
     }
+  }
+  const handleSearch = async () => {
+    try {
+      const isUser = await axios.get(`/account/isUser/${searchedUser}`)
+      console.log(isUser)
+      console.log(history)
+      console.log("hello")
+      const { data } = isUser
+      if (data) {
+        history.replace(`/profile/${searchedUser}`)
+        console.log(history)
+        console.log("if")
+      } else {
+        history.replace(`/noUser/${searchedUser}`)
+        console.log("else")
+      }
+    } catch (e) {
+      alert(`Error searching user: ${e}`)
+    }
+  }
+
+  const handleChangeSearch = e => {
+    const { target } = e
+    const { value } = target
+    setSearchedUser(value)
   }
   const handleChangeMessage = e => {
     const { target } = e
@@ -71,15 +97,13 @@ const Home = () => {
       alert(`Error logging out: ${e}`)
     }
   }
-
   const handleProfile = async () => {
     try {
-      history.push('/profile')
+      history.push(`/profile/${user}`)
     } catch (e) {
-      alert(`Error logging out: ${e}`)
+      alert(`Error going to profile: ${e}`)
     }
   }
-
   const handleLogin = async () => {
     try {
       history.push('/login')
@@ -111,51 +135,64 @@ const Home = () => {
           )}
         </Navbar>
         <Container>
-          {isLoggedIn ? (
-            <div>
-              <Button variant="primary" onClick={handleShow}>
-                Send a Solid!
+          <SubContainer>
+            <Form>
+              <Form.Group controlId="formSearchUser">
+                <Form.Control type="username" placeholder="Search for users" onChange={handleChangeSearch}/>
+                <Form.Text className="text-muted">
+                  Search for other solidz users.
+                </Form.Text>
+              </Form.Group>
+              <Button variant="primary" type="button" onClick={handleSearch}>
+                Search
               </Button>
-              <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                keyboard={false}
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Send a Solid!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="newSolidRecipient"
-                      placeholder="Recipient's username"
-                      onChange={e => handleChangeRecipient(e)}
-                    />
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="newSolidMessage"
-                      placeholder="Message"
-                      onChange={e => handleChangeMessage(e)}
-                    />
-                  </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
+            </Form>
+              {isLoggedIn ? (
+                <div>
+                  <Button variant="primary" onClick={handleShow}>
+                    Send a Solid!
                   </Button>
-                  <Button variant="primary" onClick={handleSubmit}>Send</Button>
-                </Modal.Footer>
-              </Modal>
-            </div>
-          ) : (
-            <div>
-              <Button variant="link" onClick={handleLogin}>Login to send and receive solidz!</Button>
-            </div>
-          )}
+                  <Modal
+                    show={show}
+                    onHide={handleClose}
+                    backdrop="static"
+                    keyboard={false}
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title>Send a Solid!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <div className="form-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="newSolidRecipient"
+                          placeholder="Recipient's username"
+                          onChange={e => handleChangeRecipient(e)}
+                        />
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="newSolidMessage"
+                          placeholder="Message"
+                          onChange={e => handleChangeMessage(e)}
+                        />
+                      </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Close
+                      </Button>
+                      <Button variant="primary" onClick={handleSubmit}>Send</Button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+              ) : (
+                <div>
+                  <Button variant="link" onClick={handleLogin}>Login to send and receive solidz!</Button>
+                </div>
+              )}
+          </SubContainer>
           <div>
             <ListGroup variant="flush">
               {solidz.map(s => {
@@ -177,8 +214,13 @@ const Home = () => {
 
 const Container = s.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-direction: row;
+`
+const SubContainer = s.div`
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
 `
 
 export default Home

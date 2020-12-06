@@ -9,12 +9,27 @@ router.get('/', async (req, res) => {
   try {
     console.log("getting all the solidz")
     const all = await Solidzs.find({})
-    console.log(all)
     res.send(all)
   } catch {
     res.send('failure occurs when getting all the solidz')
   }
 })
+
+// gets all solidz for feed
+router.get('/user/:username', async (req, res) => {
+  const { username } = req.params
+  try {
+    console.log("getting all the solidz FOR A USER")
+    // console.log(username)
+    const allReceived = await Solidzs.find({ recipient: username })
+    const allSent = await Solidzs.find({ sender: username })
+    // console.log(allReceived)
+    res.send(allReceived.concat(allSent))
+  } catch {
+    res.send('failure occurs when getting all OF THSI GUYS solidz')
+  }
+})
+
 
 // send a solid to someone
 router.post('/send', isAuthenticated, async (req, res) => {

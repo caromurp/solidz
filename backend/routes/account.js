@@ -52,9 +52,11 @@ router.get('/isLoggedIn', (req, res) => {
   }
 })
 
-// router.get('/solidz', isAuthenticated, (req, res) => {
-//   solidz.find()
-// })
+router.get('/isUser/:user', async (req, res) => {
+  const {user} = req.params
+  const exists = await Users.exists({ username: user })
+  res.send(exists)
+})
 
 router.post('/logout', isAuthenticated, (req, res) => {
   req.session.username = ''

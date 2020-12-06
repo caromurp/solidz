@@ -8,14 +8,6 @@ import {
 import s from 'styled-components'
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
-import ListGroup from 'react-bootstrap/ListGroup'
-
-const getSolidz = async (setSolidz, username) => {
-  const solidz = await axios.get(`/api/user/${username}`)
-  console.log(solidz)
-  const solidzList = solidz.data
-  setSolidz(solidzList)
-}
 
 const getUser = async setThisUser => {
   const u = await axios.get('/account/user', {})
@@ -32,13 +24,11 @@ const getIsLoggedIn = async setIsLoggedIn => {
   }
 }
 
-const Profile = () => {
-  const [solidz, setSolidz] = useState([])
-  const [user, setUser] = useState('')
+const NoUser = () => {
   const [thisUser, setThisUser] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const history = useHistory()
-  
+  const { username } = useParams() 
 
   const handleLogout = async () => {
     try {
@@ -73,13 +63,8 @@ const Profile = () => {
     }
   }
 
-  const { username } = useParams() 
- 
-
-  useEffect(() => {
+  useEffect(async () => {
     const intervalID = setInterval(() => {
-      setUser(username)
-      getSolidz(setSolidz, username)
       getUser(setThisUser)
       getIsLoggedIn(setIsLoggedIn)
     }, 1000)
@@ -107,18 +92,7 @@ const Profile = () => {
         </Navbar>
         <Container>
           <div>
-          <h1>{user}</h1>
-            <ListGroup variant="flush">
-              {/* {solidz.map(s => {
-                let sndr = <a href={`/profile/${s.sender}`}>{s.sender}</a>
-                let rcpnt = <a href={`/profile/${s.recipient}`}>{s.recipient}</a>
-                return (
-                  <div key={s._id}>
-                    <ListGroup.Item>{sndr} sent {rcpnt} a solid: {s.notificationText}</ListGroup.Item>
-                  </div>
-                )
-              })} */}
-            </ListGroup>
+            <h1>Sorry! {username} does not exist :( your search must match their exact username.</h1>
           </div>
         </Container>
       </div>
@@ -132,4 +106,4 @@ const Container = s.div`
   flex-direction: row;
 `
 
-export default Profile
+export default NoUser
