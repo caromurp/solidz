@@ -10,11 +10,12 @@ import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-const getSolidz = async (setSolidz, username) => {
+const getSolidz = async (setSolidz, setNumSolidz, username) => {
   const solidz = await axios.get(`/api/user/${username}`)
-  console.log(solidz)
-  const solidzList = solidz.data
+  const solidzList = solidz.data.solidz
+  const numSolidz = solidz.data.numSolidz
   setSolidz(solidzList)
+  setNumSolidz(numSolidz)
 }
 
 const getUser = async setThisUser => {
@@ -35,6 +36,7 @@ const getIsLoggedIn = async setIsLoggedIn => {
 const Profile = () => {
   const [solidz, setSolidz] = useState([])
   const [user, setUser] = useState('')
+  const [numSolidz, setNumSolidz] = useState(0)
   const [thisUser, setThisUser] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const history = useHistory()
@@ -74,12 +76,11 @@ const Profile = () => {
   }
 
   const { username } = useParams() 
- 
 
   useEffect(() => {
     const intervalID = setInterval(() => {
       setUser(username)
-      getSolidz(setSolidz, username)
+      getSolidz(setSolidz, setNumSolidz, username)
       getUser(setThisUser)
       getIsLoggedIn(setIsLoggedIn)
     }, 1000)
@@ -108,8 +109,9 @@ const Profile = () => {
         <Container>
           <div>
           <h1>{user}</h1>
+          <h2>{numSolidz}</h2>
             <ListGroup variant="flush">
-              {/* {solidz.map(s => {
+              {solidz.map(s => {
                 let sndr = <a href={`/profile/${s.sender}`}>{s.sender}</a>
                 let rcpnt = <a href={`/profile/${s.recipient}`}>{s.recipient}</a>
                 return (
@@ -117,7 +119,7 @@ const Profile = () => {
                     <ListGroup.Item>{sndr} sent {rcpnt} a solid: {s.notificationText}</ListGroup.Item>
                   </div>
                 )
-              })} */}
+              })}
             </ListGroup>
           </div>
         </Container>

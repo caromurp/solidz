@@ -56,17 +56,11 @@ const Home = () => {
   const handleSearch = async () => {
     try {
       const isUser = await axios.get(`/account/isUser/${searchedUser}`)
-      console.log(isUser)
-      console.log(history)
-      console.log("hello")
       const { data } = isUser
       if (data) {
         history.replace(`/profile/${searchedUser}`)
-        console.log(history)
-        console.log("if")
       } else {
         history.replace(`/noUser/${searchedUser}`)
-        console.log("else")
       }
     } catch (e) {
       alert(`Error searching user: ${e}`)

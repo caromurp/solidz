@@ -35,7 +35,7 @@ const Signup = () => {
         <h1>Sign Up</h1>
         <form>
           <input placeholder="Username" onChange={e => setUsername(e.target.value)} />
-          <input placeholder="Password" onChange={e => setPassword(e.target.value)} />
+          <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
           <Button variant="primary" value="Signup" onClick={() => signup(username, password)}>Submit</Button>
           <Button variant="link" onClick={handleLogin}>Already have an account? Log in here!</Button>
         </form>
